@@ -1,0 +1,47 @@
+#include<iostream>
+using namespace std;
+int main() {
+    int n;
+    cout << "Enter number of processes: ";
+    cin >> n;
+    int arrival_time[n], burst_time[n], priority[n], completion_time[n], turnaround_time[n], waiting_time[n];
+    int total_turnaround_time = 0, total_waiting_time = 0;
+    for(int i = 0; i < n; i++) {
+        cout << "Enter arrival time, burst time and priority for process " << i + 1 << ": ";
+        cin >> arrival_time[i] >> burst_time[i] >> priority[i];
+        completion_time[i] = 0;
+    }
+    int current_time = 0, completed_processes = 0;
+    while (completed_processes < n) {
+        int idx = -1;
+        int max_priority = -1;
+        for(int i = 0; i < n; i++) {
+            if(arrival_time[i] <= current_time && completion_time[i] == 0) {
+                if(priority[i] > max_priority) {
+                    max_priority = priority[i];
+                    idx = i;
+                }
+            }
+        }
+        if(idx != -1) {
+            completion_time[idx] = current_time + burst_time[idx];
+            turnaround_time[idx] = completion_time[idx] - arrival_time[idx];
+            waiting_time[idx] = turnaround_time[idx] - burst_time[idx];
+            total_turnaround_time += turnaround_time[idx];
+            total_waiting_time += waiting_time[idx];
+            completed_processes++;
+            current_time = completion_time[idx];
+        } else {
+            current_time++;
+        }
+    }
+    cout << "\nProcess\tArrival\tBurst\tPriority\tCompletion\tTurnaround\tWaiting\n";
+    for(int i = 0; i < n; i++) {
+        cout << i+1 << "\t" << arrival_time[i] << "\t" << burst_time[i] << "\t" 
+             << priority[i] << "\t" << completion_time[i] << "\t\t" << turnaround_time[i] 
+             << "\t\t" << waiting_time[i] << "\n";
+    }
+    cout << "\nAverage Turnaround Time: " << (float)total_turnaround_time/n << "\n";
+    cout << "Average Waiting Time: " << (float)total_waiting_time/n << "\n";
+    return 0;
+}
