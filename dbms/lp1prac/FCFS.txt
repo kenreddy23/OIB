@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int n;
+    cout << "Enter number of processes: ";
+    cin >> n;
+    int at[n];
+    int bt[n];
+    int ct[n];
+    int tat[n];
+    int wt[n];
+    for (int i = 0; i < n; i++) {
+        cout << "Enter arrival time for process " << i + 1 << ": ";
+        cin >> at[i];
+        cout << "Enter burst time for process " << i + 1 << ": ";
+        cin >> bt[i];
+    }
+    int currentTime = 0;
+    for (int i = 0; i < n; i++) {
+        if (currentTime < at[i]) {
+            currentTime = at[i];
+        }
+        currentTime += bt[i];
+        ct[i] = currentTime;
+    }
+    for (int i = 0; i < n; i++) {
+        tat[i] = ct[i] - at[i];
+        wt[i] = tat[i] - bt[i];
+    }
+    cout << "\nProcess\tArrival Time\tBurst Time\tCompletion Time\tTurnaround Time\tWaiting Time\n";
+    for (int i = 0; i < n; i++) {
+        cout << i + 1 << "\t" << at[i] << "\t\t" << bt[i] << "\t\t" << ct[i] << "\t\t" << tat[i] << "\t\t" << wt[i] << "\n";
+    }
+    float avgtat;
+    float tatsum = 0;
+    for (int i = 0; i < n; i++){
+        tatsum += tat[i];
+    }
+    avgtat = tatsum/n;
+    cout<<"Average turnaround time is: "<<avgtat<<endl;    
+    float avgwt;
+    float wtsum = 0;
+    for (int i = 0; i < n; i++){
+        wtsum += wt[i];
+    }
+    avgwt = wtsum/n;
+    cout<<"Average waiting time is: "<<avgwt<<endl;
+    return 0;
+}
